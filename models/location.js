@@ -5,8 +5,8 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const LocationSchema = new Schema({users:
   [{
     name:{type:String, required: true, unique:true},
-    latitude:{type:String, required: true},
-    longitude:{type:String, required: true},
+    latitude:{type:String},
+    longitude:{type:String},
     id:{type:ObjectId}
   }]}
 );

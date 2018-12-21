@@ -23,6 +23,7 @@ app.post('/api/user', async (req, res) =>{
     }});
     await Location.find({_id:req.body.id}, async (err, sala) => {
       let checkUser = false;
+      console.log(req.body);
       if (lodash.isEmpty(sala)) {
         //if there is no entry matching the id, create a new room
         newItem.save();
@@ -49,7 +50,6 @@ app.post('/api/user', async (req, res) =>{
 app.post('/api/user/room/search', async (req, res) => {
   const local = await Location.find({'_id':req.body[0]._id})
   .catch((err) => {
-    console.log(err);
     res.status(200).send('id not found');
   });
   res.status(200).send(local[0].users);
@@ -62,6 +62,23 @@ app.get('/api/user/:id', async (req, res) => {
     users.push(local[0].users[i])
   }
   res.status(200).send(users);
+});
+
+app.post('/api/user/room/new', async (req, res) => {
+  console.log(req.body);
+  const newItem = new Location({users:{
+      name: req.body.name,
+    }});
+    const local = await Location.find()
+    console.log(await Location.find({'users.name':req.body.name}));
+    await Location.deleteMany({'users.name':req.body.name}, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    newItem.save();
+    console.log(newItem);
+    res.status(200).send(newItem._id);
 });
 
 app.listen(port, () => {
